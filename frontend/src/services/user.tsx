@@ -1,5 +1,7 @@
-const registerUrl = "http://localhost:3001/api/register";
-const loginUrl = "http://localhost:3001/api/login";
+import { baseUrl } from "./constants";
+
+const registerUrl = `${baseUrl}/api/register`;
+const loginUrl = `${baseUrl}/api/login`;
 
 export interface User {
     username: string;
