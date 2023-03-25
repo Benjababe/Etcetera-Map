@@ -5,22 +5,26 @@ import { createEtcObjectVoteTbl } from "./etcobjectvote";
 
 const { Pool } = pg.default;
 
-let dbusername = "postgres";
-let dbpassword = "password";
-let dbname = "etcmap";
+let dbUsername = "postgres";
+let dbPassword = "password";
+let dbName = "etcmap";
+let dbHost = "localhost";
+let dbPort = "5432";
 
 if (process.env.DBUSERNAME && process.env.DBPASSWORD && process.env.DBNAME) {
-    dbusername = process.env.DBUSERNAME.toString();
-    dbpassword = process.env.DBPASSWORD.toString();
-    dbname = process.env.DBNAME.toString();
+    dbUsername = process.env.DBUSERNAME.toString();
+    dbPassword = process.env.DBPASSWORD.toString();
+    dbName = process.env.DBNAME.toString();
+    dbHost = process.env.DBHOST.toString();
+    dbPort = process.env.DBPORT.toString();
 }
 
 const pool = new Pool({
-    user: dbusername,
-    password: dbpassword,
-    host: "localhost",
-    port: 5432,
-    database: dbname,
+    user: dbUsername,
+    password: dbPassword,
+    host: dbHost,
+    port: dbPort,
+    database: dbName,
 });
 
 /**
