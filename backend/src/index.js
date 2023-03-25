@@ -11,6 +11,7 @@ initDB();
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.use(express.static("build"));
 app.use(express.json());
 app.use(cors());
 app.use(routes.objectRouter);
