@@ -15,9 +15,8 @@ export interface EtcObject {
     voted?: number;
 }
 
-export const getEtcObjects = async (MAP_TYPE: string): Promise<EtcObject[]> => {
-    const url = new URL(objectUrl);
-    url.searchParams.set("map_type", MAP_TYPE);
+export const getEtcObjects = async (mapType: string): Promise<EtcObject[]> => {
+    const url = `${objectUrl}?map_type=${mapType}`;
     const res = await fetch(url);
     const data: EtcObject[] = await res.json();
 
