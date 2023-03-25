@@ -1,0 +1,10 @@
+.CurrentLocationButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 2px;
+}

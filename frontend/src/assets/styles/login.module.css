@@ -1,0 +1,62 @@
+.LoginContainer {
+    padding-top: 1rem;
+}
+
+.LoginField {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 6rem 12rem;
+    row-gap: 0.75rem;
+    padding: 0.5rem 1rem 1rem 0;
+}
+
+.LoggedIn {
+    text-align: center;
+}
+
+.Success {
+    color: rgb(50, 200, 0);
+    text-align: center;
+}
+
+.Error {
+    color: rgb(200, 0, 0);
+    text-align: center;
+}
+
+.LoginField label {
+    text-align: right;
+    padding-right: 0.5rem;
+}
+
+.LoginSubmit {
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.LoginSubmitBtn {
+    background-color: rgb(55, 55, 255);
+    color: azure;
+    font-size: medium;
+    border-width: 0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+    display: block;
+    cursor: pointer;
+}
+
+.LogoutBtn {
+    background-color: rgb(55, 55, 255);
+    color: azure;
+    font-size: medium;
+    border-width: 0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+    display: block;
+    cursor: pointer;
+    width: 80%;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+}

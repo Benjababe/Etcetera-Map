@@ -1,0 +1,58 @@
+.SideBarContainer {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    text-align: left;
+}
+
+.SideBar {
+    background-color: whitesmoke;
+    height: 100vh;
+    width: 0vw;
+    overflow-x: hidden;
+    transition: width ease-in-out 0.3s;
+}
+
+.SideBarShow {
+    width: 25vw;
+}
+
+.SideBarToggle {
+    height: 100vh;
+    padding-left: 1rem;
+}
+
+.SideBarToggleIcon {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    border-style: solid;
+    border-radius: 100%;
+    border-width: 0.125rem;
+    padding: 0.25rem;
+    color: rgb(55, 55, 255);
+    background-color: whitesmoke;
+    cursor: pointer;
+    transition: transform ease-in-out 0.4s;
+}
+
+.SideBarToggleIconLeft {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.MapTypeSelect {
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+@media (max-width: 600px) {
+    .SideBarShow {
+        width: 80vw;
+    }
+}

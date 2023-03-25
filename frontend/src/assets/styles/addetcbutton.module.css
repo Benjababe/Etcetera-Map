@@ -1,0 +1,20 @@
+.AddBtn {
+    background-color: rgb(55, 55, 255);
+    color: azure;
+    font-size: larger;
+    border-width: 0;
+    border-radius: 2rem;
+    padding: 0.75rem 2rem;
+    display: block;
+    position: fixed;
+    left: 50%;
+    bottom: 10%;
+    transform: translate(-50%, 50%);
+    transition: transform ease 0.3s, bottom ease 0.3s;
+    cursor: pointer;
+}
+
+.BtnHide {
+    bottom: 0;
+    transform: translate(-50%, 100%);
+}
