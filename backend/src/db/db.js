@@ -3,6 +3,9 @@ import { createUserTbl } from "./user";
 import { createEtcObjectTbl } from "./etcobject";
 import { createEtcObjectVoteTbl } from "./etcobjectvote";
 
+import dotenv from "dotenv"
+dotenv.config();
+
 const { Pool } = pg.default;
 
 let dbUsername = "postgres";
@@ -11,13 +14,16 @@ let dbName = "etcmap";
 let dbHost = "localhost";
 let dbPort = "5432";
 
-if (process.env.DBUSERNAME && process.env.DBPASSWORD && process.env.DBNAME) {
+if (process.env.DBUSERNAME)
     dbUsername = process.env.DBUSERNAME.toString();
+if (process.env.DBPASSWORD)
     dbPassword = process.env.DBPASSWORD.toString();
+if (process.env.DBNAME)
     dbName = process.env.DBNAME.toString();
+if (process.env.DBHOST)
     dbHost = process.env.DBHOST.toString();
+if (process.env.DBPORT)
     dbPort = process.env.DBPORT.toString();
-}
 
 const pool = new Pool({
     user: dbUsername,
