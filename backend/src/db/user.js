@@ -1,5 +1,5 @@
+import { pool } from "./db";
 import bcrypt from "bcrypt";
-import { runQuery } from "./db";
 
 const saltRounds = 10;
 
@@ -12,62 +12,33 @@ export const createUserTbl = async () => {
             salt TEXT NOT NULL,
             PRIMARY KEY ("user_id")
         );`;
-    await runQuery(userDDL, []);
+    await pool.query(userDDL, []);
 }
 
 
 /**
  * 
- * @param {String}   username 
- * @param {String}   password 
- * @param {Function} onSuccess  Callback function for a successful registration
- * @param {Function} onError    Callback function for an unsuccessful registration
+ * @param {String} username 
+ * @param {String} pwHash 
  */
-export const register = (username, password, onSuccess, onError) => {
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-        if (err) {
-            onError(err);
-            return;
-        }
+export const register = async (username, pwHash, salt) => {
+    const query = "INSERT INTO \"user\" (username, password_hash, salt) VALUES ($1, $2, $3)";
+    const values = [username.trim(), pwHash, salt];
 
-        bcrypt.hash(password.trim(), salt, (err, passwordHash) => {
-            if (err) {
-                onError(err);
-                return;
-            }
-
-            const query = "INSERT INTO \"user\" (username, password_hash, salt) VALUES ($1, $2, $3)";
-            const values = [username.trim(), passwordHash, salt];
-            runQuery(query, values, onSuccess, onError);
-        });
-    });
+    const data = await pool.query(query, values);
+    return data;
 };
 
 /**
  * 
+ * Used for logging in, fetches the password hash and salt to be compared
  * @param {String} username 
  * @param {String} password 
- * @param {Function} onSuccess callback function for successful login
- * @param {Function} onError   callback function for unsuccessful login
  */
-export const login = (username, password, onSuccess, onError) => {
+export const getUserCredentials = async (username) => {
     const query = "SELECT user_id, password_hash, salt FROM \"user\" WHERE username=$1 LIMIT 1";
     const values = [username.trim()];
 
-    runQuery(query, values, (result) => {
-        if (result.rowCount == 0) {
-            onError({ detail: "Incorrect username/password" });
-            return;
-        }
-
-        const row = result.rows[0];
-        const pwHash = row["password_hash"];
-
-        bcrypt.compare(password.trim(), pwHash, (err, cmpRes) => {
-            if (result === false)
-                onError(err);
-            else
-                onSuccess(cmpRes, row["user_id"]);
-        });
-    }, onError);
+    const data = await pool.query(query, values);
+    return data;
 };

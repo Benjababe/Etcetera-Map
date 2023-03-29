@@ -1,28 +1,35 @@
 import { Router } from "express";
 import { selectEtcObjects, insertEtcObject } from "../db";
 import { getDecodedToken } from "./user";
+import { runEtcRank } from "../etc";
 
 export const objectRouter = Router();
 
-objectRouter.get("/api/objects", (req, res) => {
+// retrieving Etc objects
+objectRouter.get("/api/objects", async (req, res) => {
     const mapType = req.query.map_type;
-    selectEtcObjects(
-        mapType,
-        (data) => { res.json(data.rows); },
-        () => { res.json({ success: false }); }
-    );
+    try {
+        const data = await selectEtcObjects(mapType);
+        res.json(data.rows);
+    } catch (e) {
+        res.json({ success: false });
+    }
 });
 
+// user adding an Etc object
 objectRouter.post("/api/objects", async (req, res) => {
-    const data = req.body;
+    const etcObject = req.body;
     const decodedToken = getDecodedToken(req);
     if (!decodedToken.userId)
         res.status(403).send("Unauthorised");
 
-    insertEtcObject(
-        decodedToken.userId,
-        data,
-        (approved) => { res.json({ success: true, etcObject: data, approved: approved }); },
-        () => { res.json({ success: false }); }
-    );
+    const userId = decodedToken.userId;
+    const trusted = runEtcRank(userId);
+
+    try {
+        const data = await insertEtcObject(userId, trusted, etcObject);
+        res.json({ success: true, etcObject: data, approved: trusted });
+    } catch (e) {
+        res.json({ success: false });
+    }
 });

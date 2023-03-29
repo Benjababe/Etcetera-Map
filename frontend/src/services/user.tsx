@@ -14,12 +14,12 @@ interface UserError {
 
 interface RegisterResponse {
     success: boolean;
-    error?: UserError;
+    error?: string;
 }
 
 interface LoginResponse {
     success: boolean;
-    error?: UserError;
+    error?: string;
     user?: User;
 }
 

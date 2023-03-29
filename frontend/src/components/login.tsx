@@ -40,7 +40,7 @@ export const Login = ({ user, setUser }: LoginProps) => {
         if (res.success)
             showSuccess("Registration Successful", 3000);
         else
-            showError(res.error.detail, 3000);
+            showError(res.error, 3000);
     }, [usernameRef, passwordRef]);
 
     const login = useCallback(async () => {
@@ -57,7 +57,7 @@ export const Login = ({ user, setUser }: LoginProps) => {
             setUser(res.user);
             localStorage.setItem("user", JSON.stringify(res.user));
         } else {
-            showError(res.error.detail, 3000);
+            showError(res.error, 3000);
         }
     }, [usernameRef, passwordRef]);
 

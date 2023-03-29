@@ -1,4 +1,5 @@
-import { runQuery } from "./db";
+import { pool } from "./db";
+
 
 export const createEtcObjectVoteTbl = async () => {
     const objectDDL = `
@@ -9,7 +10,7 @@ export const createEtcObjectVoteTbl = async () => {
             vote_val INT NOT NULL DEFAULT 0,
             PRIMARY KEY ("etc_object_id", "user_id")
         );`;
-    await runQuery(objectDDL, []);
+    await pool.query(objectDDL, []);
 }
 
 
@@ -18,10 +19,8 @@ export const createEtcObjectVoteTbl = async () => {
  * @param {number} etcObjectId Id of etc object that was voted on
  * @param {number} userId Id of the user who voted
  * @param {number} voteVal Value of the vote. 1 for positive, -1 for negative.
- * @param {*} onSuccess callback function for successful insert
- * @param {*} onError callback function for unsuccessful insert
  */
-export const insertEtcObjectVote = (etcObjectId, userId, voteVal, onSuccess, onError) => {
+export const insertEtcObjectVote = async (etcObjectId, userId, voteVal) => {
     const query = `
         INSERT INTO \"etc_object_vote\" (etc_object_id, user_id, vote_val) 
         VALUES ($1, $2, $3)
@@ -33,5 +32,6 @@ export const insertEtcObjectVote = (etcObjectId, userId, voteVal, onSuccess, onE
         voteVal
     ];
 
-    runQuery(query, values, onSuccess, onError);
+    const data = await pool.query(query, values);
+    return data;
 };

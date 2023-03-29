@@ -19,7 +19,7 @@ export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObjects }: VoteW
         if (res.success) {
             const updatedEtcObjects = etcObjects.map((eo) => {
                 if (eo.id == etcObject.id)
-                    eo.voted = voteVal;
+                    eo.voted = res.voteVal;
                 return eo;
             });
             setEtcObjects(updatedEtcObjects);

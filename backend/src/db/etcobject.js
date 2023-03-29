@@ -1,5 +1,4 @@
-import { runQuery } from "./db";
-import { runEtcRank } from "../etc";
+import { pool } from "./db";
 
 export const createEtcObjectTbl = async () => {
     const objectDDL = `
@@ -16,28 +15,32 @@ export const createEtcObjectTbl = async () => {
             status INT NOT NULL DEFAULT 0,
             PRIMARY KEY ("etc_object_id")
         );`;
-    await runQuery(objectDDL, []);
+    await pool.query(objectDDL, []);
 }
 
-export const selectEtcObjects = (mapType, onSuccess, onError) => {
+/**
+ * Retrieves all Etc Objects of a map type and are approved
+ * @param {string} mapType 
+ * @returns 
+ */
+export const selectEtcObjects = async (mapType) => {
     const query = `
         SELECT etc_object_id AS "id", name, type, lat, lng, level, comments
         FROM "etc_object"
         WHERE type=$1
             AND status=1`;
-    runQuery(query, [mapType], onSuccess, onError);
+    const data = await pool.query(query, [mapType]);
+    return data;
 };
 
 
 /**
  * 
  * @param {number} userId Id of user who submitted the etc object
+ * @param {boolean} trusted Flag whether user is trusted from EtcRank algorithm
  * @param {Object} etcObject Etc object to insert into map
- * @param {Function} onSuccess callback function for successful insert
- * @param {Function} onError callback function for unsuccessful insert
  */
-export const insertEtcObject = (userId, etcObject, onSuccess, onError) => {
-    const trusted = runEtcRank(userId);
+export const insertEtcObject = async (userId, trusted, etcObject) => {
     const status = (trusted) ? 1 : 0;
     const query = `
         INSERT INTO \"etc_object\" (user_id, type, lat, lng, level, comments, status) 
@@ -52,10 +55,6 @@ export const insertEtcObject = (userId, etcObject, onSuccess, onError) => {
         status
     ];
 
-    runQuery(
-        query,
-        values,
-        () => { onSuccess(trusted); },
-        onError
-    );
+    const data = await pool.query(query, values);
+    return data;
 };

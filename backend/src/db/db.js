@@ -25,7 +25,7 @@ if (process.env.DBHOST)
 if (process.env.DBPORT)
     dbPort = process.env.DBPORT.toString();
 
-const pool = new Pool({
+export const pool = new Pool({
     user: dbUsername,
     password: dbPassword,
     host: dbHost,
@@ -34,31 +34,15 @@ const pool = new Pool({
 });
 
 /**
- * 
- * @param {String} query Query string
- * @param {Array<any>} values Values if using a prameterized query
- * @param {Function} onSuccess Callback function on successful query
- * @param {Function} onError Callback function on error
- */
-export const runQuery = async (query, values, onSuccess = undefined, onError = undefined) => {
-    return new Promise((resolve) => {
-        pool.query(query, values, (err, result) => {
-            if (err && onError != undefined) {
-                onError(err);
-            } else if (onSuccess != undefined) {
-                onSuccess(result);
-            }
-            resolve();
-        });
-    });
-
-};
-
-/**
  * Initialises database with schemas if they don't already exist
  */
 export const initDB = async () => {
-    await createUserTbl();
-    await createEtcObjectTbl();
-    await createEtcObjectVoteTbl();
+    try {
+        await createUserTbl();
+        await createEtcObjectTbl();
+        await createEtcObjectVoteTbl();
+    } catch (e) {
+        console.error("Error with initialising databases");
+        console.error(e);
+    }
 };

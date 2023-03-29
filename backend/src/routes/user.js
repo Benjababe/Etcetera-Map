@@ -1,23 +1,37 @@
+import bcrypt from "bcrypt";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { register, login } from "../db";
+import { getUserCredentials } from "../db/user";
 
 export const userRouter = Router();
 
-userRouter.post("/api/register", (req, res) => {
+const SALT_ROUNDS = 10;
+
+userRouter.post("/api/register", async (req, res) => {
     const { username, password } = req.body;
 
-    register(username, password,
-        () => { res.json({ success: true }) },
-        (err) => { res.json({ success: false, error: err }) });
+    try {
+        const salt = await bcrypt.genSalt(SALT_ROUNDS);
+        const pwHash = await bcrypt.hash(password.trim(), salt);
+        await register(username, pwHash, salt);
+        res.json({ success: true });
+    } catch (e) {
+        res.json({ success: false, error: e });
+    }
 });
 
-userRouter.post("/api/login", (req, res) => {
+userRouter.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
 
+    const handleError = (err) => {
+        res.status(403).json({ success: false, error: err });
+    }
+
+    // on successful logins, send tokens to the user
     const handleLogin = (cmp, userId = "") => {
         if (!cmp)
-            res.status(403).json({ success: false, error: { details: "Incorrect username/password" } });
+            handleError("Incorrect username/password");
         else {
             const token = jwt.sign(
                 { username: username, userId: userId },
@@ -36,17 +50,26 @@ userRouter.post("/api/login", (req, res) => {
         }
     }
 
-    login(
-        username,
-        password,
-        handleLogin,
-        (err) => { res.status(403).json({ success: false, error: err }) }
-    );
+    try {
+        const data = await getUserCredentials(username);
+        if (data.rowCount === 0) {
+            handleError("Incorrect username/password");
+            return;
+        }
+
+        const row = data.rows[0];
+        const pwHash = row["password_hash"];
+        const cmpRes = await bcrypt.compare(password.trim(), pwHash);
+        handleLogin(cmpRes, row["user_id"]);
+    } catch (e) {
+        handleError(e);
+    }
 });
 
 
 /**
  * 
+ * Reads the authorisation header for a JWT and returns the decoded form
  * @param {Request} req 
  * @returns {string}
  */

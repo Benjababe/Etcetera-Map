@@ -4,6 +4,17 @@ import { User } from "./user";
 const objectUrl = `${baseUrl}/api/objects`;
 const voteUrl = `${baseUrl}/api/objectVote`;
 
+interface VoteResponse {
+    success: boolean;
+    voteVal?: number;
+}
+
+interface CreateEtcObjectResponse {
+    success: boolean;
+    etcObject?: EtcObject;
+    approved?: boolean;
+}
+
 export interface EtcObject {
     id?: number;
     type?: string;
@@ -23,7 +34,7 @@ export const getEtcObjects = async (mapType: string): Promise<EtcObject[]> => {
     return data;
 };
 
-export const createObject = async (user: User, etcObject: EtcObject) => {
+export const createObject = async (user: User, etcObject: EtcObject): Promise<CreateEtcObjectResponse> => {
     const options = {
         method: "POST",
         headers: {
@@ -39,7 +50,7 @@ export const createObject = async (user: User, etcObject: EtcObject) => {
     return data;
 };
 
-export const voteObject = async (user: User, etcObjectId: number, voteVal: number) => {
+export const voteObject = async (user: User, etcObjectId: number, voteVal: number): Promise<VoteResponse> => {
     const options = {
         method: "POST",
         headers: {
