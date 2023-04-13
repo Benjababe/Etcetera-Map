@@ -4,6 +4,7 @@ import { createEtcObjectTbl } from "./etcobject";
 import { createEtcObjectVoteTbl } from "./etcobjectvote";
 
 import dotenv from "dotenv"
+import { createEtcObjectImageTbl } from "./etcobjectimage";
 dotenv.config();
 
 const { Pool } = pg.default;
@@ -41,6 +42,7 @@ export const initDB = async () => {
         await createUserTbl();
         await createEtcObjectTbl();
         await createEtcObjectVoteTbl();
+        await createEtcObjectImageTbl();
     } catch (e) {
         console.error("Error with initialising databases");
         console.error(e);

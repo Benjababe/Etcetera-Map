@@ -2,6 +2,7 @@ import { initDB, pool } from "./db";
 import { register, getUserCredentials } from "./user";
 import { selectEtcObjects, insertEtcObject } from "./etcobject";
 import { insertEtcObjectVote } from "./etcobjectvote";
+import { insertEtcObjectImage } from "./etcobjectimage";
 
 export {
     initDB,
@@ -11,4 +12,5 @@ export {
     selectEtcObjects,
     insertEtcObject,
     insertEtcObjectVote,
+    insertEtcObjectImage,
 }

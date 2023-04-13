@@ -1,4 +1,5 @@
 import { pool } from "./db";
+import { insertEtcObjectImage } from "./etcobjectimage";
 
 export const createEtcObjectTbl = async () => {
     const objectDDL = `
@@ -25,10 +26,19 @@ export const createEtcObjectTbl = async () => {
  */
 export const selectEtcObjects = async (mapType) => {
     const query = `
-        SELECT etc_object_id AS "id", name, type, lat, lng, level, comments
-        FROM "etc_object"
+        SELECT eo.etc_object_id AS "id", eo.name, eo.type, 
+            eo.lat, eo.lng, eo.level, eo.comments,
+            COALESCE(
+                array_agg(eoi.path)
+                FILTER (WHERE eoi.path IS NOT NULL),
+                '{}'
+            ) AS paths
+        FROM "etc_object" AS eo
+        LEFT JOIN "etc_object_image" AS eoi ON eoi.etc_object_id=eo.etc_object_id
         WHERE type=$1
-            AND status=1`;
+            AND status=1
+        GROUP BY eo.etc_object_id
+    `;
     const data = await pool.query(query, [mapType]);
     return data;
 };
@@ -39,12 +49,14 @@ export const selectEtcObjects = async (mapType) => {
  * @param {number} userId Id of user who submitted the etc object
  * @param {boolean} trusted Flag whether user is trusted from EtcRank algorithm
  * @param {Object} etcObject Etc object to insert into map
+ * @param {Express.Multer.File[]} images Images uploaded with the Etc object
  */
-export const insertEtcObject = async (userId, trusted, etcObject) => {
+export const insertEtcObject = async (userId, trusted, etcObject, images) => {
     const status = (trusted) ? 1 : 0;
     const query = `
         INSERT INTO \"etc_object\" (user_id, type, lat, lng, level, comments, status) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING etc_object_id`;
     const values = [
         userId,
         etcObject.type,
@@ -55,6 +67,12 @@ export const insertEtcObject = async (userId, trusted, etcObject) => {
         status
     ];
 
-    const data = await pool.query(query, values);
-    return data;
+    const { rows } = await pool.query(query, values);
+
+    const insertedId = rows[0]["etc_object_id"];
+    images.forEach((image) => {
+        insertEtcObjectImage(insertedId, image);
+    });
+
+    return rows;
 };

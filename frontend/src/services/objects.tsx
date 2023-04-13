@@ -24,6 +24,8 @@ export interface EtcObject {
     level?: string;
     comments?: string;
     voted?: number;
+    images?: FileList;
+    paths?: string[];
 }
 
 export const getEtcObjects = async (mapType: string): Promise<EtcObject[]> => {
@@ -35,13 +37,23 @@ export const getEtcObjects = async (mapType: string): Promise<EtcObject[]> => {
 };
 
 export const createObject = async (user: User, etcObject: EtcObject): Promise<CreateEtcObjectResponse> => {
+    const formData = new FormData();
+    formData.append("type", etcObject.type);
+    formData.append("lat", etcObject.lat.toString());
+    formData.append("lng", etcObject.lng.toString());
+    formData.append("level", etcObject.level);
+    formData.append("comments", etcObject.comments);
+
+    for (const image of etcObject.images) {
+        formData.append("images", image);
+    }
+
     const options = {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${user.authToken}`,
-            "Content-Type": "application/json"
         },
-        body: JSON.stringify(etcObject),
+        body: formData,
     };
 
     const res = await fetch(objectUrl, options);

@@ -113,6 +113,10 @@ const EtcMap = () => {
             setActiveEtcObject(etcObject);
     }, [activeEtcObject]);
 
+    const clustererOptions = {
+        gridSize: 30
+    };
+
     return (
         <div>
             <LoadScript
@@ -132,7 +136,7 @@ const EtcMap = () => {
                             onDragEnd={(e) => { setSelfMarker(e.latLng.toJSON()); }}
                             draggable={true} /> : ""}
                     {(etcObjects.length > 0) ?
-                        <MarkerClustererF>
+                        <MarkerClustererF options={clustererOptions}>
                             {(clusterer) => (
                                 <>
                                     {etcObjects.map((etcObject, i) => {

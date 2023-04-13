@@ -16,6 +16,7 @@ interface AddWindowProps {
 export const AddWindow = ({ user, selfMarker, setSelfMarker, markers, setMarkers, mapType, setEnableAddWindow }: AddWindowProps) => {
     const txtLevelRef = useRef<HTMLInputElement>(null);
     const txtCommentsRef = useRef<HTMLTextAreaElement>(null);
+    const imgUploadRef = useRef<HTMLInputElement>(null);
 
     const addObject = async () => {
         const etcObject: EtcObject = {
@@ -24,6 +25,7 @@ export const AddWindow = ({ user, selfMarker, setSelfMarker, markers, setMarkers
             lng: selfMarker.lng,
             level: txtLevelRef.current.value.trim(),
             comments: txtCommentsRef.current.value.trim(),
+            images: imgUploadRef.current.files,
         };
 
         const res = await createObject(user, etcObject);
@@ -65,6 +67,9 @@ export const AddWindow = ({ user, selfMarker, setSelfMarker, markers, setMarkers
 
                 <label>Comments: </label>
                 <textarea ref={txtCommentsRef} placeholder="Describe the location" />
+
+                <label>Images: </label>
+                <input ref={imgUploadRef} type="file" multiple />
 
                 <button
                     onClick={() => addObject()}>
