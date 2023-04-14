@@ -36,7 +36,7 @@ userRouter.post("/api/login", async (req, res) => {
             const token = jwt.sign(
                 { username: username, userId: userId },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: "7d" }
+                { expiresIn: "30d" }
             );
 
             const user = {
@@ -44,8 +44,8 @@ userRouter.post("/api/login", async (req, res) => {
                 authToken: token
             };
 
-            res.cookie("jwtLogin", token, { maxAge: 7 * 24 * 60 * 60 * 1000 });
-            res.cookie("username", username, { maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie("jwtLogin", token, { maxAge: 30 * 24 * 60 * 60 * 1000 });
+            res.cookie("username", username, { maxAge: 30 * 24 * 60 * 60 * 1000 });
             res.json({ success: true, user: user });
         }
     }

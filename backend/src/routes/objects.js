@@ -32,7 +32,16 @@ objectRouter.get("/api/objects", async (req, res) => {
 objectRouter.post("/api/objects", upload.array(IMAGE_FOLDER), async (req, res) => {
     const etcObject = req.body;
     const images = req.files;
-    const decodedToken = getDecodedToken(req);
+    let decodedToken;
+
+    try {
+        decodedToken = getDecodedToken(req);
+    } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            res.json({ success: false, error: "Session token has expired, please relogin" });
+        }
+    }
+
     if (!decodedToken.userId)
         res.status(403).send("Unauthorised");
 

@@ -41,7 +41,7 @@ export const AddWindow = ({ user, selfMarker, setSelfMarker, markers, setMarkers
             }
             setSelfMarker(null);
         } else {
-            console.log("Failed!");
+            alert(res.error);
         }
     };
 

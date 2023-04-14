@@ -13,6 +13,7 @@ interface CreateEtcObjectResponse {
     success: boolean;
     etcObject?: EtcObject;
     approved?: boolean;
+    error?: string;
 }
 
 export interface EtcObject {
