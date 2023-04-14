@@ -19,7 +19,7 @@ export const createImageFolder = () => {
 };
 
 export const logMiddleware = (req, res, next) => {
-    const logStr = `${req.connection.remoteAddress} ${req.method} ${req.originalUrl}`;
+    const logStr = `${req.method} ${req.originalUrl}`;
     console.log(logStr);
     fs.appendFile(HTTP_LOG_FILE, logStr + "\n", (err) => {
         if (err) throw err;
