@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 export const IMAGE_FOLDER = "images";
+export const HTTP_LOG_FILE = "httplog";
 
 /**
  * 
@@ -18,6 +19,10 @@ export const createImageFolder = () => {
 };
 
 export const logMiddleware = (req, res, next) => {
-    console.log(`${req.method} ${req.originalUrl}`);
+    const logStr = `${req.connection.remoteAddress} ${req.method} ${req.originalUrl}`;
+    console.log(logStr);
+    fs.appendFile(HTTP_LOG_FILE, logStr + "\n", (err) => {
+        if (err) throw err;
+    });
     next();
 };
