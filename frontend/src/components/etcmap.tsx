@@ -8,6 +8,7 @@ import { EtcObject, getEtcObjects } from "../services/objects";
 
 import waterFountainIcon from "../assets/images/icons/water-fountain.svg";
 import vendingMachineIcon from "../assets/images/icons/vending-machine.svg";
+import publicShowerIcon from "../assets/images/icons/public-shower.svg";
 import classes from "../assets/styles/etcmap.module.css";
 import { VoteWindow } from "./votewindow";
 import { CurrentLocation, CurrentLocationMarker } from "./currentlocationmarker";
@@ -23,6 +24,7 @@ interface MapIcons {
 const ICONS: MapIcons = {
     "Water Fountain": waterFountainIcon,
     "Vending Machine": vendingMachineIcon,
+    "Public Shower": publicShowerIcon,
 };
 
 const MAP_OPTIONS: google.maps.MapOptions = {
@@ -116,6 +118,8 @@ const EtcMap = () => {
     const clustererOptions = {
         gridSize: 30
     };
+
+    console.log(etcObjects, ICONS[mapType]);
 
     return (
         <div>
