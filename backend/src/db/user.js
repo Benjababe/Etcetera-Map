@@ -101,13 +101,17 @@ export const calculateReputationScore = async (userId = -1, etcObjectId = -1) =>
                 JOIN etc_object eo ON eov.etc_object_id=eo.etc_object_id
                 GROUP BY eov.user_id
             )
-            SELECT SUM(uv.voter_score * vrep.reputation_score * (GREATEST(vrec.pos_votes_received, 1) / GREATEST(vg.votes_given, 1))) AS new_reputation_score
+            SELECT COALESCE(
+                SUM(uv.voter_score * vrep.reputation_score * (GREATEST(vrec.pos_votes_received, 1) / GREATEST(vg.votes_given, 1))),
+                10
+            ) AS new_reputation_score
             FROM user_votes uv
             JOIN voter_reputation vrep ON uv.user_id=vrep.user_id
             LEFT JOIN votes_received vrec ON uv.user_id=vrec.user_id
             LEFT JOIN votes_given vg ON uv.user_id=vg.user_id
     `;
     const { rows } = await pool.query(q2, [userId]);
+
 
     const q3 = `UPDATE "user" SET reputation_score=$1 WHERE user_id=$2`;
     await pool.query(q3, [rows[0]["new_reputation_score"], userId]);
