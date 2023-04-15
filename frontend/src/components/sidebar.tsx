@@ -27,6 +27,7 @@ export const SideBar = ({ user, setUser, setMapType }: SideBarProps) => {
     const mapTypeOptions: MapTypeOption[] = [
         { value: "Vending Machine", label: "Vending Machine" },
         { value: "Water Fountain", label: "Water Fountain" },
+        { value: "Public Shower", label: "Public Shower" },
     ];
 
     const toggleSideBar = () => {

@@ -1,7 +1,4 @@
 import { pool } from "./db";
-import bcrypt from "bcrypt";
-
-const saltRounds = 10;
 
 export const createUserTbl = async () => {
     const userDDL = `
