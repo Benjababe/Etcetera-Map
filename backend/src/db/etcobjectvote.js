@@ -1,4 +1,5 @@
 import { pool } from "./db";
+import { calculateReputationScore } from "./user";
 
 
 export const createEtcObjectVoteTbl = async () => {
@@ -12,6 +13,23 @@ export const createEtcObjectVoteTbl = async () => {
         );`;
     await pool.query(objectDDL, []);
 }
+
+
+/**
+ * 
+ * @param {number} userId User to retrieve votes for
+ */
+export const selectEtcObjectVote = async (userId) => {
+    const query = `
+            SELECT eov.user_id, 
+                SUM(vote_val) AS vote_tally
+            FROM "etc_object_vote" AS eov
+            JOIN "etc_object" AS eo ON (eo.etc_object_id=eov.etc_object_id)
+            WHERE eo.user_id=$1
+            GROUP BY eov.user_id;`;
+    const data = await pool.query(query, [userId]);
+    return data;
+};
 
 
 /**
@@ -33,5 +51,6 @@ export const insertEtcObjectVote = async (etcObjectId, userId, voteVal) => {
     ];
 
     const data = await pool.query(query, values);
+    await calculateReputationScore(-1, etcObjectId);
     return data;
 };

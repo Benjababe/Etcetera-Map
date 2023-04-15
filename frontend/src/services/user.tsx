@@ -2,14 +2,12 @@ import { baseUrl } from "./constants";
 
 const registerUrl = `${baseUrl}/api/register`;
 const loginUrl = `${baseUrl}/api/login`;
+const reputationUrl = `${baseUrl}/api/reputation`;
 
 export interface User {
     username: string;
     authToken: string;
-}
-
-interface UserError {
-    detail: string;
+    userId: number;
 }
 
 interface RegisterResponse {
@@ -21,6 +19,11 @@ interface LoginResponse {
     success: boolean;
     error?: string;
     user?: User;
+}
+
+interface ReputationResponse {
+    success: boolean;
+    reputation: boolean;
 }
 
 const register = async (username: string, password: string): Promise<RegisterResponse> => {
@@ -49,7 +52,21 @@ const login = async (username: string, password: string): Promise<LoginResponse>
     return data;
 };
 
+const checkReputation = async (userId: number): Promise<ReputationResponse> => {
+    const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: userId }),
+    };
+
+    const res = await fetch(reputationUrl, options);
+    const data = await res.json();
+
+    return data;
+};
+
 export default {
     register,
-    login
+    login,
+    checkReputation,
 };

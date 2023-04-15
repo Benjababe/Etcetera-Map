@@ -29,6 +29,10 @@
     margin-top: 1rem;
 }
 
+.VoteContainer {
+    margin-top: 1.5rem;
+}
+
 .VoteBox {
     display: flex;
     justify-content: space-evenly;
@@ -76,6 +80,10 @@
     .VoteWindowShow {
         bottom: -0.25rem;
         right: initial;
+    }
+
+    .VoteContainer {
+        margin-top: 0.5rem;
     }
 
     .VoteBox {

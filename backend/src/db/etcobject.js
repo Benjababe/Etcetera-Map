@@ -27,17 +27,19 @@ export const createEtcObjectTbl = async () => {
 export const selectEtcObjects = async (mapType) => {
     const query = `
         SELECT eo.etc_object_id AS "id", eo.name, eo.type, 
-            eo.lat, eo.lng, eo.level, eo.comments,
+            eo.lat, eo.lng, eo.level, eo.comments, eo.user_id,
+            u.username AS user,
             COALESCE(
                 array_agg(eoi.path)
                 FILTER (WHERE eoi.path IS NOT NULL),
                 '{}'
             ) AS paths
         FROM "etc_object" AS eo
-        LEFT JOIN "etc_object_image" AS eoi ON eoi.etc_object_id=eo.etc_object_id
+        LEFT JOIN "user" AS u ON (u.user_id=eo.user_id)
+        LEFT JOIN "etc_object_image" AS eoi ON (eoi.etc_object_id=eo.etc_object_id)
         WHERE type=$1
             AND status=1
-        GROUP BY eo.etc_object_id
+        GROUP BY eo.etc_object_id, u.username
     `;
     const data = await pool.query(query, [mapType]);
     return data;
@@ -47,7 +49,7 @@ export const selectEtcObjects = async (mapType) => {
 /**
  * 
  * @param {number} userId Id of user who submitted the etc object
- * @param {boolean} trusted Flag whether user is trusted from EtcRank algorithm
+ * @param {boolean} trusted Flag whether user is trusted from EtcReputation algorithm
  * @param {Object} etcObject Etc object to insert into map
  * @param {Express.Multer.File[]} images Images uploaded with the Etc object
  */

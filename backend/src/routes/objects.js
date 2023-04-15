@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import { selectEtcObjects, insertEtcObject } from "../db";
 import { getDecodedToken } from "./user";
-import { runEtcRank, IMAGE_FOLDER } from "../etc";
+import { runEtcReputation, IMAGE_FOLDER } from "../etc";
 
 export const objectRouter = Router();
 
@@ -46,7 +46,7 @@ objectRouter.post("/api/objects", upload.array(IMAGE_FOLDER), async (req, res) =
         res.status(403).send("Unauthorised");
 
     const userId = decodedToken.userId;
-    const trusted = runEtcRank(userId);
+    const trusted = await runEtcReputation(userId);
 
     try {
         const data = await insertEtcObject(userId, trusted, etcObject, images);

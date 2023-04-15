@@ -18,6 +18,8 @@ interface CreateEtcObjectResponse {
 
 export interface EtcObject {
     id?: number;
+    user_id?: number;
+    user?: string;
     type?: string;
     name?: string;
     lat: number;

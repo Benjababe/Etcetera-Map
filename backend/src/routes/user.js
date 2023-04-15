@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
-import { register, login } from "../db";
-import { getUserCredentials } from "../db/user";
+import { register, calculateReputationScore, getUserCredentials } from "../db";
 
 export const userRouter = Router();
 
@@ -16,8 +15,8 @@ userRouter.post("/api/register", async (req, res) => {
         const pwHash = await bcrypt.hash(password.trim(), salt);
         await register(username, pwHash, salt);
         res.json({ success: true });
-    } catch (e) {
-        res.json({ success: false, error: e });
+    } catch (err) {
+        res.json({ success: false, error: err.detail });
     }
 });
 
@@ -41,6 +40,7 @@ userRouter.post("/api/login", async (req, res) => {
 
             const user = {
                 username: username,
+                userId: userId,
                 authToken: token
             };
 
@@ -61,9 +61,16 @@ userRouter.post("/api/login", async (req, res) => {
         const pwHash = row["password_hash"];
         const cmpRes = await bcrypt.compare(password.trim(), pwHash);
         handleLogin(cmpRes, row["user_id"]);
-    } catch (e) {
-        handleError(e);
+    } catch (err) {
+        handleError(err.detail);
     }
+});
+
+
+userRouter.post("/api/reputation", async (req, res) => {
+    const { userId } = req.body;
+    const data = await calculateReputationScore(userId);
+    res.json(data);
 });
 
 

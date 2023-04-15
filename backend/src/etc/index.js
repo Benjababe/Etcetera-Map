@@ -1,16 +1,21 @@
 import fs from "node:fs";
 
+import { calculateReputationScore } from "../db";
+
 export const IMAGE_FOLDER = "images";
 export const HTTP_LOG_FILE = "httplog";
+
+const REP_SCORE_THRESHOLD = 5;
 
 /**
  * 
  * Retrieves the user's trustworthy-ness
  * @param {number} userId 
- * @returns {boolean}
+ * @returns {Promise<boolean>}
  */
-export const runEtcRank = (userId) => {
-    return false;
+export const runEtcReputation = async (userId) => {
+    const repScore = await calculateReputationScore(userId);
+    return (repScore >= 5);
 };
 
 export const createImageFolder = () => {

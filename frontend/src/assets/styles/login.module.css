@@ -1,4 +1,6 @@
 .LoginContainer {
+    margin: auto;
+    width: fit-content;
     padding-top: 1rem;
 }
 
@@ -46,7 +48,8 @@
     cursor: pointer;
 }
 
-.LogoutBtn {
+.LogoutBtn,
+.RepBtn {
     background-color: rgb(55, 55, 255);
     color: azure;
     font-size: medium;

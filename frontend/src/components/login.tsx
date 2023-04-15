@@ -66,6 +66,11 @@ export const Login = ({ user, setUser }: LoginProps) => {
         localStorage.removeItem("user");
     };
 
+    const checkReputation = async () => {
+        const rep = await userService.checkReputation(user.userId);
+        console.log(rep);
+    };
+
     return (
         <div className={classes.LoginContainer}>
             <div ref={statusRef}></div>
@@ -77,6 +82,11 @@ export const Login = ({ user, setUser }: LoginProps) => {
                             className={classes.LogoutBtn}
                             onClick={logout}>
                             Logout
+                        </button>
+                        <button
+                            className={classes.RepBtn}
+                            onClick={checkReputation}>
+                            Check Reputation
                         </button>
                     </div>
                     :

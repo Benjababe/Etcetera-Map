@@ -75,16 +75,19 @@ export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObjects }: VoteW
                         }
                     </div>
                     {
-                        (user !== null) ?
-                            <div className={classes.VoteBox}>
-                                <img
-                                    className={`${classes.VoteIcon} ${(etcObject.voted == 1) ? classes.VoteUp : ""}`}
-                                    src={voteUpIcon}
-                                    onClick={() => voteEtcObject(1)} />
-                                <img
-                                    className={`${classes.VoteIcon} ${(etcObject.voted == -1) ? classes.VoteDown : ""}`}
-                                    src={voteDownIcon}
-                                    onClick={() => voteEtcObject(-1)} />
+                        (user !== null && user.userId !== etcObject.user_id) ?
+                            <div className={classes.VoteContainer}>
+                                <div>Submitted by: {etcObject.user}</div>
+                                <div className={classes.VoteBox}>
+                                    <img
+                                        className={`${classes.VoteIcon} ${(etcObject.voted == 1) ? classes.VoteUp : ""}`}
+                                        src={voteUpIcon}
+                                        onClick={() => voteEtcObject(1)} />
+                                    <img
+                                        className={`${classes.VoteIcon} ${(etcObject.voted == -1) ? classes.VoteDown : ""}`}
+                                        src={voteDownIcon}
+                                        onClick={() => voteEtcObject(-1)} />
+                                </div>
                             </div>
                             : ""
                     }

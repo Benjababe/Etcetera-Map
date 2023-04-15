@@ -32,8 +32,8 @@ export const AddWindow = ({ user, selfMarker, setSelfMarker, markers, setMarkers
         if (res.success) {
             if (res.approved) {
                 const latlng = {
-                    lat: res.etcObject.lat,
-                    lng: res.etcObject.lng,
+                    lat: etcObject.lat,
+                    lng: etcObject.lng,
                 };
                 setMarkers(markers.concat(latlng));
             } else {
