@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { GoogleMap, LoadScript, MarkerF, MarkerClustererF } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, MarkerF, MarkerClustererF } from "@react-google-maps/api";
 import { AddButton } from "./addetcbutton";
 import { AddWindow } from "./addwindow";
 import { SideBar } from "./sidebar";
@@ -142,7 +142,7 @@ const EtcMap = () => {
                             {(clusterer) => (
                                 <>
                                     {etcObjects.map((etcObject, i) => {
-                                        return <MarkerF
+                                        return <Marker
                                             key={i}
                                             position={{ lat: etcObject.lat, lng: etcObject.lng }}
                                             visible={true}

@@ -9,6 +9,7 @@ import githubIcon from "../assets/images/icons/github.svg";
 import { faS, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { AddFile } from "./addfile";
 library.add(faS, faArrowRight);
 
 interface SideBarProps {
@@ -54,6 +55,12 @@ export const SideBar = ({ user, setUser, setMapType }: SideBarProps) => {
                         value={selectValue || mapTypeOptions[0]}
                         onChange={onMapTypeChange}
                         options={mapTypeOptions} />
+                    {(user !== null) ?
+                        <AddFile
+                            user={user}
+                            mapType={(selectValue === null) ? mapTypeOptions[0].value : selectValue.value} />
+                        : ""
+                    }
                 </div>
                 <footer className={classes.Footer}>
                     <a

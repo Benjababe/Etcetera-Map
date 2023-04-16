@@ -2,6 +2,7 @@ import { baseUrl } from "./constants";
 import { User } from "./user";
 
 const objectUrl = `${baseUrl}/api/objects`;
+const objectBulkUrl = `${baseUrl}/api/objects/bulk`;
 const voteUrl = `${baseUrl}/api/objectVote`;
 
 interface VoteResponse {
@@ -12,6 +13,13 @@ interface VoteResponse {
 interface CreateEtcObjectResponse {
     success: boolean;
     etcObject?: EtcObject;
+    approved?: boolean;
+    error?: string;
+}
+
+interface CreateEtcObjectBulkResponse {
+    success: boolean;
+    etcObjects?: EtcObject[];
     approved?: boolean;
     error?: string;
 }
@@ -60,6 +68,22 @@ export const createObject = async (user: User, etcObject: EtcObject): Promise<Cr
     };
 
     const res = await fetch(objectUrl, options);
+    const data = await res.json();
+
+    return data;
+};
+
+export const createObjectBulk = async (user: User, mapType: string, etcObjects: EtcObject[]): Promise<CreateEtcObjectBulkResponse> => {
+    const options = {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${user.authToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mapType: mapType, etcObjects: etcObjects }),
+    };
+
+    const res = await fetch(objectBulkUrl, options);
     const data = await res.json();
 
     return data;

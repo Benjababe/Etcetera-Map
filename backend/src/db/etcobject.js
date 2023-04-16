@@ -1,5 +1,6 @@
 import { pool } from "./db";
 import { insertEtcObjectImage } from "./etcobjectimage";
+import format from "pg-format";
 
 export const createEtcObjectTbl = async () => {
     const objectDDL = `
@@ -78,3 +79,22 @@ export const insertEtcObject = async (userId, trusted, etcObject, images) => {
 
     return rows;
 };
+
+
+/**
+ * 
+ * @param {number} userId Id of user who submitted the etc object
+ * @param {boolean} trusted Flag whether user is trusted from EtcReputation algorithm
+ * @param {Object} etcObject Etc objects to insert into map
+ */
+export const insertEtcObjectBulk = async (userId, trusted, mapType, etcObjects) => {
+    const status = (trusted) ? 1 : 0;
+    const query = `
+            INSERT INTO "etc_object" (user_id, type, lat, lng, level, comments, status)
+            VALUES %L`;
+    const values = etcObjects.map(obj => [userId, mapType, obj.lat, obj.lng, obj.level, obj.comments, status]);
+    const fmtQuery = format(query, values);
+
+    const { rows } = await pool.query(fmtQuery);
+    return rows;
+}

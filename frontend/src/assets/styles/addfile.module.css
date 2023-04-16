@@ -1,0 +1,42 @@
+.AddFileContainer {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100%;
+}
+
+.AddFileSelector {
+    margin-top: 1rem;
+}
+
+.AddFileSelector::file-selector-button {
+    font-weight: bold;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.AddFileList {
+    margin-top: 2rem;
+    width: 100%;
+    max-height: 100%;
+    overflow-x: scroll;
+}
+
+.UploadBtn {
+    background-color: rgb(55, 55, 255);
+    color: azure;
+    font-size: medium;
+    border-width: 0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+    display: block;
+    cursor: pointer;
+    width: 80%;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+}
