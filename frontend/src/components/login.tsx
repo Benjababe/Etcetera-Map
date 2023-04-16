@@ -1,6 +1,7 @@
 import React, { useRef, useCallback } from "react";
 import userService, { User } from "../services/user";
 import classes from "../assets/styles/login.module.css";
+import bClasses from "../assets/styles/button.module.css";
 
 interface LoginProps {
     user: User;
@@ -79,12 +80,12 @@ export const Login = ({ user, setUser }: LoginProps) => {
                     <div className={classes.LoggedIn}>
                         You are logged in as {user.username}
                         <button
-                            className={classes.LogoutBtn}
+                            className={`${classes.LogoutBtn} ${bClasses.ResponsiveButton}`}
                             onClick={logout}>
                             Logout
                         </button>
                         <button
-                            className={classes.RepBtn}
+                            className={`${classes.RepBtn} ${bClasses.ResponsiveButton}`}
                             onClick={checkReputation}>
                             Check Reputation
                         </button>
@@ -98,12 +99,12 @@ export const Login = ({ user, setUser }: LoginProps) => {
                         <input ref={passwordRef} type="password" />
                         <div className={classes.LoginSubmit}>
                             <button
-                                className={classes.LoginSubmitBtn}
+                                className={`${classes.LoginSubmitBtn} ${bClasses.ResponsiveButton}`}
                                 onClick={register}>
                                 Register
                             </button>
                             <button
-                                className={classes.LoginSubmitBtn}
+                                className={`${classes.LoginSubmitBtn} ${bClasses.ResponsiveButton}`}
                                 onClick={login}>
                                 Login
                             </button>

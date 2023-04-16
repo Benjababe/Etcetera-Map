@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import classes from "../assets/styles/sidebar.module.css";
+import bClasses from "../assets/styles/button.module.css";
 import { Login } from "./login";
 import { User } from "../services/user";
 
@@ -59,7 +60,7 @@ export const SideBar = ({ user, setUser, setMapType }: SideBarProps) => {
                         href="https://github.com/Benjababe/Etcetera-Map"
                         target="_blank"
                         rel="noopener noreferrer">
-                        <img className={classes.GitHubIcon} src={githubIcon} />
+                        <img className={`${classes.GitHubIcon} ${bClasses.ResponsiveButton}`} src={githubIcon} />
                     </a>
                 </footer>
             </div>

@@ -1,0 +1,7 @@
+.ResponsiveButton {
+    transition: transform 0.3s;
+}
+
+.ResponsiveButton:hover {
+    transform: scale(1.1);
+}

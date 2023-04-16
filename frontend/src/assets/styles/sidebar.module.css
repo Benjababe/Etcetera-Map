@@ -61,11 +61,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60px;
+    height: 5rem;
+    padding-bottom: 1rem;
 }
 
 .GitHubIcon {
-    width: 48px;
+    width: 3.5rem;
 }
 
 @media (max-width: 600px) {
