@@ -8,6 +8,8 @@
 }
 
 .SideBar {
+    display: flex;
+    flex-direction: column;
     background-color: whitesmoke;
     height: 100vh;
     width: 0vw;
@@ -44,11 +46,26 @@
     transform: translateY(-50%) rotate(180deg);
 }
 
+.SideBarContent {
+    flex: 1;
+}
+
 .MapTypeSelect {
     margin-top: 1rem;
     margin-left: auto;
     margin-right: auto;
     width: 80%;
+}
+
+.Footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.GitHubIcon {
+    width: 48px;
 }
 
 @media (max-width: 600px) {

@@ -4,6 +4,7 @@ import classes from "../assets/styles/sidebar.module.css";
 import { Login } from "./login";
 import { User } from "../services/user";
 
+import githubIcon from "../assets/images/icons/github.svg";
 import { faS, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -42,15 +43,25 @@ export const SideBar = ({ user, setUser, setMapType }: SideBarProps) => {
     return (
         <div className={classes.SideBarContainer}>
             <div className={`${classes.SideBar} ${(showSideBar) ? classes.SideBarShow : ""}`}>
-                <Login
-                    user={user}
-                    setUser={setUser} />
-                <Select
-                    isSearchable={false}
-                    className={classes.MapTypeSelect}
-                    value={selectValue || mapTypeOptions[0]}
-                    onChange={onMapTypeChange}
-                    options={mapTypeOptions} />
+                <div className={classes.SideBarContent}>
+                    <Login
+                        user={user}
+                        setUser={setUser} />
+                    <Select
+                        isSearchable={false}
+                        className={classes.MapTypeSelect}
+                        value={selectValue || mapTypeOptions[0]}
+                        onChange={onMapTypeChange}
+                        options={mapTypeOptions} />
+                </div>
+                <footer className={classes.Footer}>
+                    <a
+                        href="https://github.com/Benjababe/Etcetera-Map"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <img className={classes.GitHubIcon} src={githubIcon} />
+                    </a>
+                </footer>
             </div>
             <div className={classes.SideBarToggle}>
                 <FontAwesomeIcon

@@ -119,8 +119,6 @@ const EtcMap = () => {
         gridSize: 30
     };
 
-    console.log(etcObjects, ICONS[mapType]);
-
     return (
         <div>
             <LoadScript
