@@ -68,9 +68,13 @@ userRouter.post("/api/login", async (req, res) => {
 
 
 userRouter.post("/api/reputation", async (req, res) => {
-    const { userId } = req.body;
-    const data = await calculateReputationScore(userId);
-    res.json(data);
+    try {
+        const { userId } = req.body;
+        const repScore = await calculateReputationScore(userId);
+        res.json({ success: true, reputationScore: repScore });
+    } catch (err) {
+        res.json({ success: false, error: err.detail });
+    }
 });
 
 

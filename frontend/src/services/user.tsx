@@ -23,7 +23,8 @@ interface LoginResponse {
 
 interface ReputationResponse {
     success: boolean;
-    reputation: boolean;
+    error?: string;
+    reputationScore: number;
 }
 
 const register = async (username: string, password: string): Promise<RegisterResponse> => {

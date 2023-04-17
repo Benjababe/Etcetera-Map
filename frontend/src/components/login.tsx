@@ -68,8 +68,11 @@ export const Login = ({ user, setUser }: LoginProps) => {
     };
 
     const checkReputation = async () => {
-        const repScore = await userService.checkReputation(user.userId);
-        alert(`Your reputation score is ${repScore}`);
+        const res = await userService.checkReputation(user.userId);
+        if (res.success)
+            alert(`Your reputation score is ${res.reputationScore.toFixed(2)}`);
+        else
+            showError(res.error, 3000);
     };
 
     return (

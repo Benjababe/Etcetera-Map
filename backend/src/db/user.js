@@ -102,7 +102,11 @@ export const calculateReputationScore = async (userId = -1, etcObjectId = -1) =>
                 GROUP BY eov.user_id
             )
             SELECT COALESCE(
-                SUM(uv.voter_score * vrep.reputation_score * (GREATEST(vrec.pos_votes_received, 1) / GREATEST(vg.votes_given, 1))),
+                SUM(
+                    uv.voter_score * 
+                    (CASE WHEN vrep.reputation_score < 0 THEN 1 / (0.2 - vrep.reputation_score) ELSE vrep.reputation_score END) * 
+                    (GREATEST(vrec.pos_votes_received, 1) / GREATEST(vg.votes_given, 1))
+                ),
                 10
             ) AS new_reputation_score
             FROM user_votes uv
