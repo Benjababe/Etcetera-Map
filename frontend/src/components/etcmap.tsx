@@ -23,7 +23,8 @@ interface MapIcons {
 
 const ICONS: MapIcons = {
     "Water Fountain": waterFountainIcon,
-    "Vending Machine": vendingMachineIcon,
+    "Vending Machine (Food)": vendingMachineIcon,
+    "Vending Machine (Drinks)": vendingMachineIcon,
     "Public Shower": publicShowerIcon,
 };
 
@@ -40,7 +41,7 @@ const MAP_OPTIONS: google.maps.MapOptions = {
 
 const EtcMap = () => {
     const [map, setMap] = useState<google.maps.Map>(null);
-    const [mapType, setMapType] = useState<string>("Vending Machine");
+    const [mapType, setMapType] = useState<string>("Vending Machine (Food)");
     const [selfMarker, setSelfMarker] = useState<EtcObject>(null);
     const [activeEtcObject, setActiveEtcObject] = useState<EtcObject>(null);
     const [etcObjects, setEtcObjects] = useState<EtcObject[]>([]);
