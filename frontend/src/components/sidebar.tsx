@@ -28,8 +28,8 @@ export const SideBar = ({ user, setUser, setMapType }: SideBarProps) => {
     const [selectValue, setSelectValue] = useState<MapTypeOption>(null);
 
     const mapTypeOptions: MapTypeOption[] = [
-        { value: "Vending Machine (Food)", label: "Vending Machine (Food)" },
         { value: "Vending Machine (Drinks)", label: "Vending Machine (Drinks)" },
+        { value: "Vending Machine (Food)", label: "Vending Machine (Food)" },
         { value: "Water Fountain", label: "Water Fountain" },
         { value: "Public Shower", label: "Public Shower" },
     ];
