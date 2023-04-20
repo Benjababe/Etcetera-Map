@@ -31,6 +31,9 @@ export const AddFile = ({ user, mapType }: AddFileProps) => {
         createObjectBulk(user, mapType, toAdd);
     };
 
+    // temporarily removing it
+    return <></>;
+
     return (
         <div className={classes.AddFileContainer}>
             <input
