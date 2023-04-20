@@ -1,15 +1,13 @@
 import { Router } from "express";
 import { insertEtcObjectVote } from "../db";
-import { getDecodedToken } from "./user";
+import { authenticateUser } from "./user";
 
 export const objectVoteRouter = Router();
 
 // user votes for an existing Etc object
-objectVoteRouter.post("/api/objectVote", async (req, res) => {
+objectVoteRouter.post("/api/objectVote", authenticateUser, async (req, res) => {
     const { etcObjectId, voteVal } = req.body;
-    const { userId } = getDecodedToken(req);
-    if (!userId)
-        res.status(403).send("Unauthorised");
+    const userId = req.decodedToken.userId;
 
     try {
         await insertEtcObjectVote(etcObjectId, userId, voteVal);

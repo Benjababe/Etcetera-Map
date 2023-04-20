@@ -92,3 +92,23 @@ export const getDecodedToken = (req) => {
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     return decodedToken
 };
+
+
+export const authenticateUser = (req, res, next) => {
+    let decodedToken;
+
+    try {
+        decodedToken = getDecodedToken(req);
+    } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            res.json({ success: false, error: "Session token has expired, please relogin" });
+        }
+    }
+
+    if (decodedToken.userId) {
+        req.decodedToken = decodedToken;
+        next();
+    }
+    else
+        res.status(403).send("Unauthorised");
+}

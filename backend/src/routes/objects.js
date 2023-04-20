@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import { selectEtcObjects, insertEtcObject, deleteEtcObject, insertEtcObjectBulk } from "../db";
-import { getDecodedToken } from "./user";
+import { authenticateUser } from "./user";
 import { runEtcReputation, IMAGE_FOLDER } from "../etc";
 
 export const objectRouter = Router();
@@ -29,23 +29,11 @@ objectRouter.get("/api/objects", async (req, res) => {
 });
 
 // user adding an Etc object
-objectRouter.post("/api/objects", upload.array(IMAGE_FOLDER), async (req, res) => {
+objectRouter.post("/api/objects", authenticateUser, upload.array(IMAGE_FOLDER), async (req, res) => {
     let etcObject = req.body;
     const images = req.files;
-    let decodedToken;
 
-    try {
-        decodedToken = getDecodedToken(req);
-    } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            res.json({ success: false, error: "Session token has expired, please relogin" });
-        }
-    }
-
-    if (!decodedToken.userId)
-        res.status(403).send("Unauthorised");
-
-    const userId = decodedToken.userId;
+    const userId = req.decodedToken.userId;
     const trusted = await runEtcReputation(userId);
 
     try {
@@ -57,23 +45,10 @@ objectRouter.post("/api/objects", upload.array(IMAGE_FOLDER), async (req, res) =
 });
 
 // user adding several Etc objects at once
-objectRouter.post("/api/objects/bulk", async (req, res) => {
+objectRouter.post("/api/objects/bulk", authenticateUser, async (req, res) => {
     const { mapType, etcObjects } = req.body;
 
-    let decodedToken;
-
-    try {
-        decodedToken = getDecodedToken(req);
-    } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            res.json({ success: false, error: "Session token has expired, please relogin" });
-        }
-    }
-
-    if (!decodedToken.userId)
-        res.status(403).send("Unauthorised");
-
-    const userId = decodedToken.userId;
+    const userId = req.decodedToken.userId;
     const trusted = await runEtcReputation(userId);
 
     try {
@@ -88,23 +63,11 @@ objectRouter.post("/api/objects/bulk", async (req, res) => {
 
 
 // user removing an Etc object
-objectRouter.delete("/api/objects", async (req, res) => {
+objectRouter.delete("/api/objects", authenticateUser, async (req, res) => {
     const { etcObjectId } = req.body;
-    let decodedToken;
 
     try {
-        decodedToken = getDecodedToken(req);
-    } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            res.json({ success: false, error: "Session token has expired, please relogin" });
-        }
-    }
-
-    if (!decodedToken.userId)
-        res.status(403).send("Unauthorised");
-
-    try {
-        const userId = decodedToken.userId;
+        const userId = req.decodedToken.userId;
         await deleteEtcObject(userId, etcObjectId);
         res.json({ success: true, etcObjectId: etcObjectId });
     } catch (err) {
