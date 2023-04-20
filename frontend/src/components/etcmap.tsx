@@ -41,7 +41,7 @@ const MAP_OPTIONS: google.maps.MapOptions = {
 
 const EtcMap = () => {
     const [map, setMap] = useState<google.maps.Map>(null);
-    const [mapType, setMapType] = useState<string>("Vending Machine (Food)");
+    const [mapType, setMapType] = useState<string>("Vending Machine (Drinks)");
     const [selfMarker, setSelfMarker] = useState<EtcObject>(null);
     const [activeEtcObject, setActiveEtcObject] = useState<EtcObject>(null);
     const [etcObjects, setEtcObjects] = useState<EtcObject[]>([]);
@@ -178,6 +178,7 @@ const EtcMap = () => {
                     user={user}
                     etcObject={activeEtcObject}
                     etcObjects={etcObjects}
+                    setEtcObject={setActiveEtcObject}
                     setEtcObjects={setEtcObjects} />
             </LoadScript>
             <SideBar

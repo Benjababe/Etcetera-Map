@@ -77,7 +77,7 @@ export const insertEtcObject = async (userId, trusted, etcObject, images) => {
         insertEtcObjectImage(insertedId, image);
     });
 
-    return rows;
+    return rows[0];
 };
 
 
@@ -97,4 +97,26 @@ export const insertEtcObjectBulk = async (userId, trusted, mapType, etcObjects) 
 
     const { rows } = await pool.query(fmtQuery);
     return rows;
+};
+
+
+/**
+ * 
+ * @param {number} userId Id of user who submitted the delete request
+ * @param {number} etcObjectId Id of Etc object to be deleted
+ */
+export const deleteEtcObject = async (userId, etcObjectId) => {
+    const sQuery = `SELECT user_id FROM "etc_object" WHERE etc_object_id=$1`;
+    const { rows } = await pool.query(sQuery, [etcObjectId]);
+    const objUserId = rows[0]["user_id"];
+
+    if (objUserId !== userId)
+        throw { detail: "User did not submit the object!" };
+
+    const dQuery = `
+        UPDATE "etc_object"
+        SET status=-1
+        WHERE etc_object_id=$1
+    `;
+    await pool.query(dQuery, [etcObjectId]);
 }

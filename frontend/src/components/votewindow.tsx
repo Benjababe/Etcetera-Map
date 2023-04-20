@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from "react";
-import { EtcObject, voteObject } from "../services/objects";
+import { EtcObject, deleteObject, voteObject } from "../services/objects";
 import classes from "../assets/styles/votewindow.module.css";
 import { User } from "../services/user";
 import { baseUrl } from "../services/constants";
@@ -13,10 +13,11 @@ interface VoteWindowProps {
     user: User,
     etcObject: EtcObject,
     etcObjects: EtcObject[],
+    setEtcObject: React.Dispatch<React.SetStateAction<EtcObject>>,
     setEtcObjects: React.Dispatch<React.SetStateAction<EtcObject[]>>,
 }
 
-export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObjects }: VoteWindowProps) => {
+export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObject, setEtcObjects }: VoteWindowProps) => {
     const voteEtcObject = async (voteVal: number) => {
         const res = await voteObject(user, etcObject.id, voteVal);
         if (res.success) {
@@ -42,6 +43,17 @@ export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObjects }: VoteW
     const onImageClick = (e: SyntheticEvent) => {
         const img = e.target as HTMLImageElement;
         window.open(img.currentSrc, "_blank");
+    };
+
+    const onDeleteButtonClicked = async () => {
+        const res = await deleteObject(user, etcObject.id);
+        if (res.success) {
+            console.log(etcObjects);
+            setEtcObjects(etcObjects.filter(obj => obj.id !== etcObject.id));
+            setEtcObject(null);
+        } else {
+            alert(res.error);
+        }
     };
 
     return (
@@ -75,7 +87,8 @@ export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObjects }: VoteW
                         }
                     </div>
                     {
-                        (user !== null && user.userId !== etcObject.user_id) ?
+                        (user !== null && user.userId !== etcObject.user_id)
+                            ?
                             <div className={classes.VoteContainer}>
                                 <div>Submitted by: {etcObject.user}</div>
                                 <div className={classes.VoteBox}>
@@ -89,7 +102,14 @@ export const VoteWindow = ({ user, etcObject, etcObjects, setEtcObjects }: VoteW
                                         onClick={() => voteEtcObject(-1)} />
                                 </div>
                             </div>
-                            : ""
+                            :
+                            <div className={classes.DeleteContainer}>
+                                <button
+                                    onClick={onDeleteButtonClicked}
+                                    className={classes.DeleteButton}>
+                                    Delete Object
+                                </button>
+                            </div>
                     }
                 </>
             }

@@ -10,9 +10,15 @@ interface VoteResponse {
     voteVal?: number;
 }
 
+interface DeleteResponse {
+    success: boolean;
+    etcObjectId?: number;
+    error?: string;
+}
+
 interface CreateEtcObjectResponse {
     success: boolean;
-    etcObject?: EtcObject;
+    etcObjectId?: number;
     approved?: boolean;
     error?: string;
 }
@@ -100,6 +106,22 @@ export const voteObject = async (user: User, etcObjectId: number, voteVal: numbe
     };
 
     const res = await fetch(voteUrl, options);
+    const data = await res.json();
+
+    return data;
+};
+
+export const deleteObject = async (user: User, etcObjectId: number): Promise<DeleteResponse> => {
+    const options = {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${user.authToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ etcObjectId: etcObjectId }),
+    };
+
+    const res = await fetch(objectUrl, options);
     const data = await res.json();
 
     return data;

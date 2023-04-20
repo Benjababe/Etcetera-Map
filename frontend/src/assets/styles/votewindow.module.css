@@ -59,6 +59,21 @@
     border-color: red;
 }
 
+.DeleteContainer {
+    margin-top: 1.5rem;
+}
+
+.DeleteButton {
+    background-color: rgb(255, 55, 55);
+    color: azure;
+    font-size: large;
+    font-weight: bold;
+    border-width: 0;
+    border-radius: 2rem;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
     .VoteWindow {
         position: absolute;
